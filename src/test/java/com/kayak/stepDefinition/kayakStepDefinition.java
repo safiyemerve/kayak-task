@@ -1,16 +1,21 @@
 package com.kayak.stepDefinition;
 
+import com.kayak.page.Kayak_Offer_Page;
 import com.kayak.page.Kayak_home_page;
 import com.kayak.util.ConfigurationReader;
 import com.kayak.util.Driver;
+import com.sun.source.tree.AssertTree;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.Set;
 
 public class kayakStepDefinition {
 
@@ -54,25 +59,34 @@ public class kayakStepDefinition {
 
 
 
-
-
-
-
-
     }
 
     @When("users go to the offer page")
     public void users_go_to_the_offer_page() {
+        Set<String> windowHandles = Driver.getDriver().getWindowHandles();
+        for (String eachWindow : windowHandles) {
+            Driver.getDriver().switchTo().window(eachWindow);
+        }
+
 
     }
-
+Kayak_Offer_Page kayak_offer_page=new Kayak_Offer_Page();
     @When("select cheapest ticket")
-    public void select_cheapest_ticket() {
+    public void select_cheapest_ticket() throws InterruptedException {
+kayak_offer_page.cheapest.click();
+Thread.sleep(5000);
 
     }
 
     @Then("verify that the offer is the same as the one listed in kayak")
     public void verify_that_the_offer_is_the_same_as_the_one_listed_in_kayak() {
+String expectedPrice="$301";
+        String actualPrice = kayak_offer_page.cheapestTicket.getText();
+        System.out.println("actualPrice = " + actualPrice);
+        Assert.assertEquals(expectedPrice,actualPrice);
+
+
+
 
     }
 }
